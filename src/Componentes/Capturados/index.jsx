@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react'
 import { useNavigate } from "react-router-dom";
-import { AppContext } from '../../Contexto/Contexto.jsx';
+import { AppContext } from '../../contexto/contexto';
 import "./style.css"
 
 function Capturados() {

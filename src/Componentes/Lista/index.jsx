@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react'
-import { AppContext } from '../../Contexto/Contexto';
+import { AppContext } from '../../contexto/contexto';
 import { useNavigate } from "react-router-dom";
 import './style.css'
 import Filtro from '../Filtro'

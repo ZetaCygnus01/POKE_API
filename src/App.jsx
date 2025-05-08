@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { AppProvider } from './Contexto/Contexto';
+import { AppProvider } from './contexto/contexto';
 
 import Menu from './Componentes/Menu'
 import Aleatorios from './Componentes/Aleatorios';
