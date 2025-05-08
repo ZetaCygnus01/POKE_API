@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from 'react'
 import { useParams } from "react-router-dom"; 
-import { AppContext } from '../../contexto/contexto';
-
+import { AppContext } from '../../Contexto/Contexto.jsx';
 function Detalle() {
 
   const { name } = useParams(); 

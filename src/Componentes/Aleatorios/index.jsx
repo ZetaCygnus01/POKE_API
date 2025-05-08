@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AppContext } from '../../contexto/contexto';
+import { AppContext } from '../../Contexto/Contexto.jsx';
 
 function Aleatorios() {
   const { data, listaCapturados ,setListaCapturados, setTipoSeleccionado } = useContext(AppContext);
