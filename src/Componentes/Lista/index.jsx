@@ -1,8 +1,9 @@
 import { useState, useEffect, useContext } from 'react'
-import { AppContext } from '../../Contexto/Contexto.jsx';
+import { AppContext } from '../../Contexto/Contexto';
 import { useNavigate } from "react-router-dom";
 import './style.css'
-import Filtro from '../Filtro';
+import Filtro from '../Filtro'
+
 function Lista() {
   
   const navigate = useNavigate();
