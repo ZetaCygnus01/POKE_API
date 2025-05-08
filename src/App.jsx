@@ -1,35 +1,34 @@
-import { useState } from 'react'
+import { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import './App.css'
-import Listar from  './Componentes/Listar'
-import Aleatorios from  './Componentes/Aleatorios'
-import Detalle from  './Componentes/Detalle'
-import Favoritos from './Componentes/Favoritos'
-import Original from './Componentes/Original'
-import Usuario from './Componentes/Usuario'
-import Menu from './Componentes/Menu';
+import { AppProvider } from './contexto/contexto';
 
-
+import Menu from './componentes/menu'
+import Aleatorios from './componentes/aleatorios';
+import Lista from './componentes/lista';
+import Capturados from './componentes/capturados';
+import Favoritos from './componentes/favoritos';
+import Usuarios from './componentes/usuarios';
+import Detalle from './componentes/detalle';
 
 function App() {
 
   return (
+    <AppProvider>
     <Router>
-
       <Menu />
-     
+
       <Routes>
-        <Route path="/" element={<Listar />} />
-        <Route path="/usuarios" element={<Usuario />} />
+        <Route path="/" element={<Lista />} />
+        <Route path="/usuarios" element={<Usuarios />} />
         <Route path="/aleatorios" element={<Aleatorios />} />
-        <Route path="/Original" element={<Original />} />
+        <Route path="/capturados" element={<Capturados />} />
         <Route path="/favoritos" element={<Favoritos />} />
-        <Route path="/:nombre" element={<Detalle />} />
         <Route path="/detalle/:name" element={<Detalle />} />
       </Routes>
-   
+
     </Router>
+    </AppProvider>
   );
 }
 
-export default App
+export default App;
