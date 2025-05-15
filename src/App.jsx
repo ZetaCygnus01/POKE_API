@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AppProvider } from './contexto/contexto';
-
-
+import { Navigate } from 'react-router-dom';
 import { supabase } from "./supabase";
+
 import Menu from './Componentes/Menu'
 import Aleatorios from './Componentes/Aleatorios';
 import Lista from './Componentes/Lista';
