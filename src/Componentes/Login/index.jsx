@@ -17,17 +17,22 @@ function Login() {
     return (
         <div>
             <h2>Login</h2>
-            <form action="">
-                <div>
-                    <label htmlFor="email">Email</label>
-                    <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                </div>
-                <div>
-                    <label htmlFor="password">Password</label>
-                    <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                </div>
-                <button type="submit" onClick={handleLogin}>Login</button>
+            <form onSubmit={handleLogin}>
+                <input
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <button type="submit">Login</button>
             </form>
+            <p>¿No tienes cuenta? <a href="/register">Regístrate</a></p>
         </div>
     )
 }
