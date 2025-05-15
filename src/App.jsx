@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AppProvider } from './contexto/contexto';
-import './App.css';
+
 
 import { supabase } from "./supabase";
 import Menu from './Componentes/Menu'
@@ -40,13 +40,17 @@ if (cargando) return <p>Cargando...</p>;
       <Menu />
 
       <Routes>
-        <Route path="/" element={<Lista />} />
-        <Route path="/usuarios" element={<Usuarios />} />
-        <Route path="/aleatorios" element={<Aleatorios />} />
-        <Route path="/capturados" element={<Capturados />} />
-        <Route path="/favoritos" element={<Favoritos />} />
-        <Route path="/detalle/:name" element={<Detalle />} />
-        <Route path="/login" element={<Login />} />
+       <Route path="/" element={usuario ? <Lista /> : <Navigate to="/login"/>} />
+            <Route path="/usuarios" element={usuario ? <Usuarios /> : <Navigate to="/login" />} />
+            <Route path="/aleatorios" element={usuario ? <Aleatorios /> :
+            <Navigate to="/login" />} />
+            <Route path="/capturados" element={usuario ? <Capturados /> :
+            <Navigate to="/login" />} />
+            <Route path="/favoritos" element={usuario ? <Favoritos /> :
+            <Navigate to="/login" />} />
+            <Route path="/detalle/:name" element={usuario ? <Detalle /> :
+            <Navigate to="/login" />} />
+            <Route path="/login" element={<Login/>} />
       </Routes>
 
     </Router>
