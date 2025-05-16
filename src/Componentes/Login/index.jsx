@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../../supabase'
+import { useNavigate } from "react-router-dom";
 
 function Login() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const navigate = useNavigate();  // Definir navigate
 
     const handleLogin = async (e) => { e.preventDefault()
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) alert("usuario o contraseña no valido")
     else {
-        setUser(data.user)
-        cargarTareasDelUsuario(data.user.id)
+        navigate("/")
     }
 }
 
@@ -26,11 +27,11 @@ function Login() {
                 />
                 <input
                     type="password"
-                    placeholder="Password"
+                    placeholder="Contraseña"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                <button type="submit">Login</button>
+                <button type="submit">Iniciar Sesion</button>
             </form>
             <p>¿No tienes cuenta? <a href="/register">Regístrate</a></p>
         </div>

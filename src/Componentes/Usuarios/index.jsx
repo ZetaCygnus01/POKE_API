@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
+import { useNavigate } from "react-router-dom";
 
 export default function Usuario() {
   const [usuario, setUsuario] = useState(null);
@@ -8,17 +9,15 @@ export default function Usuario() {
     correo: "",
     fecha_nacimiento: "",
     telefono: "",
-    roll: ""
-    });
+    rol: ""
+  });
 
-  //const [cargando, setCargando] = useState(true);
-  //const [imagen, setImagen] = useState(null);
-  //const [imagenUrl, setImagenUrl] = useState(null);
-    const [nuevaUrl, setNuevaUrl] = useState("");
-    const [imagenes, setImagenes] = useState([]);
+  const [nuevaUrl, setNuevaUrl] = useState("");
+  const [imagenes, setImagenes] = useState([]);
+  const navigate = useNavigate();
 
-// Obtener datos del usuario
-useEffect(() => {
+  // Obtener datos del usuario
+  useEffect(() => {
     async function fetchUsuario() {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
@@ -31,49 +30,50 @@ useEffect(() => {
           setUsuario(data);
           setForm(data);
           fetchImagenes(user.id);
+        }
       }
     }
-  }
+    fetchUsuario();
+  }, []);
 
-  fetchUsuario();
-}, []);
+  // Obtener imágenes
+  const fetchImagenes = async (usuarioid) => {
+    const { data, error } = await supabase
+      .from("multimedia")
+      .select("*")
+      .eq("usuarioid", usuarioid);
+    if (data) setImagenes(data);
+  };
 
-const fetchImagenes = async (usuarioid) => {
-  const { data, error } = await supabase
-    .from("multimedia")
-    .select("*")
-    .eq("usuarioid", usuarioid);
-  if (data) setImagenes(data);
-};
-
-// Actualizar datos del usuario
-const handleChange = (e) => {
-    const { name, value } = e.target;
+  // Actualizar datos del usuario
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleUpdate = async (e) => {
+  const handleUpdate = async () => {
     const { error } = await supabase
       .from("usuario")
       .update(form)
       .eq("id", usuario.id);
-    if (error) { alert("Error al actualizar el usuario"); }
-    else alert("Datos actualizados")
+    if (error) alert("Error al actualizar");
+    else alert("Datos actualizados");
   };
 
-  const handleAgregarUrl = async (e) => {
+  // Agregar nueva URL de imagen
+  const handleAgregarUrl = async () => {
     if (!nuevaUrl.trim()) return;
     const { error } = await supabase
       .from("multimedia")
-      .insert({ url: nuevaUrl, usuarioid: usuario.id });
+      .insert([{ url: nuevaUrl, usuarioid: usuario.id }]);
     if (error) {
-      alert("Error al agregar la URL");
+      alert("Error al agregar la Imagen");
     } else {
       setNuevaUrl("");
       fetchImagenes(usuario.id);
     }
   };
 
+  // Eliminar imagen
   const handleEliminarImagen = async (id) => {
     const { error } = await supabase
       .from("multimedia")
@@ -84,62 +84,73 @@ const handleChange = (e) => {
     }
   };
 
-  //cerrar sesion
+  // Cerrar sesión
   const handleLogout = async () => {
-    await supabase.auth.signOut()
-    setUser(null)
-    setTareas([])
-  }
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      alert("Error al cerrar sesión");
+    } else {
+      alert("Sesión cerrada");
+      navigate("/login");
+    }
+  };
 
   if (!usuario) return <p>Cargando...</p>;
 
   return (
-  <div>
-    <h2>Perfil de Usuario</h2>
-    <label>Nombre:
-      <input name="nombre" value={form.nombre} onChange={handleChange} />
-    </label><br />
-    <label>Correo:
-      <input name="correo" value={form.correo} onChange={handleChange} />
-    </label><br />
-    <label>Fecha de nacimiento:
-      <input type="date" name="fecha_nacimiento"
-value={form.fecha_nacimiento} onChange={handleChange} />
-    </label><br />
-    <label>Teléfono:
-      <input name="telefono" value={form.telefono} onChange={handleChange}/>
-    </label><br />
-    <label>Rol:
-      <input name="roll" value={form.roll} onChange={handleChange} />
-    </label><br />
-    <button onClick={handleUpdate}>Actualizar</button>
+    <div>
+      <h2>Perfil de Usuario</h2>
+      <label>Nombre:
+        <input name="nombre" value={form.nombre} onChange={handleChange} />
+      </label><br />
+      <label>Correo:
+        <input name="correo" value={form.correo} onChange={handleChange} />
+      </label><br />
+      <label>Fecha de nacimiento:
+        <input 
+          type="date" 
+          name="fecha_nacimiento"
+          value={form.fecha_nacimiento} 
+          onChange={handleChange} 
+        />
+      </label><br />
+      <label>Teléfono:
+        <input name="telefono" value={form.telefono} onChange={handleChange} />
+      </label><br />
+      <label>Rol:
+        <input name="rol" value={form.rol} onChange={handleChange} />
+      </label><br />
+      <button onClick={handleUpdate}>Guardar Cambios</button>
 
-    <hr />
+      <hr />
 
-    <h3>Agregar Imagen</h3>
-    <input
-      type="text"
-      value={nuevaUrl}
-      onChange={(e) => setNuevaUrl(e.target.value)}/>
+      <h3>Agregar Imagen</h3>
+      <input
+        type="text"
+        placeholder="URL de la imagen"
+        value={nuevaUrl}
+        onChange={(e) => setNuevaUrl(e.target.value)}
+      />
       <button onClick={handleAgregarUrl}>Agregar</button>
-    
-    <h3>Imagenes Guardadas</h3>
-    <ul>
-      {imagenes.map((img) => (
-        <li key={img.id}>
-          <img src={img.url} alt="Imagen" width="100" />
-          <br />
-          <button onClick={() => handleEliminarImagen(img.id)}>Eliminar</button>
-        </li>
-      ))}
-    </ul>
-    <hr />
-    <h2>Quiero Cerrar Sesion</h2>
-    <button onClick={handleLogout}>Cerrar Sesion</button>
-    {/* saltos de linea para que el menu no tape el boton */}
-    <br /><br /><br /><br /><br />
-  </div>
+      
+      <h3>Imágenes Guardadas</h3>
+      <ul>
+        {imagenes.map((img) => (
+          <li key={img.id}>
+            <img src={img.url} alt="Imagen" width="100" />
+            <br />
+            <button onClick={() => handleEliminarImagen(img.id)}>Eliminar</button>
+          </li>
+        ))}
+      </ul>
+      
+      <hr />
+      <h2>Cerrar Sesión</h2>
+      <button onClick={handleLogout}>Cerrar Sesión</button>
+
+      {/* Espacio adicional para que el menú no tape el botón */}
+      <br /><br /><br /><br /><br />
+    </div>
   );
 }
-
-
+// Comparar con el código de src/Componentes/Usuarios/index.jsx
