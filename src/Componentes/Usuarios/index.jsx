@@ -70,4 +70,76 @@ const handleChange = (e) => {
       alert("Error al agregar la URL");
     } else {
       setNuevaUrl("");
+      fetchImagenes(usuario.id);
     }
+  };
+
+  const handleEliminarImagen = async (id) => {
+    const { error } = await supabase
+      .from("multimedia")
+      .delete()
+      .eq("id", id);
+    if (!error) {
+      setImagenes(imagenes.filter((img) => img.id !== id));
+    }
+  };
+
+  //cerrar sesion
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    setUser(null)
+    setTareas([])
+  }
+
+  if (!usuario) return <p>Cargando...</p>;
+
+  return (
+  <div>
+    <h2>Perfil de Usuario</h2>
+    <label>Nombre:
+      <input name="nombre" value={form.nombre} onChange={handleChange} />
+    </label><br />
+    <label>Correo:
+      <input name="correo" value={form.correo} onChange={handleChange} />
+    </label><br />
+    <label>Fecha de nacimiento:
+      <input type="date" name="fecha_nacimiento"
+value={form.fecha_nacimiento} onChange={handleChange} />
+    </label><br />
+    <label>Teléfono:
+      <input name="telefono" value={form.telefono} onChange={handleChange}/>
+    </label><br />
+    <label>Rol:
+      <input name="roll" value={form.roll} onChange={handleChange} />
+    </label><br />
+    <button onClick={handleUpdate}>Actualizar</button>
+
+    <hr />
+
+    <h3>Agregar Imagen</h3>
+    <input
+      type="text"
+      value={nuevaUrl}
+      onChange={(e) => setNuevaUrl(e.target.value)}/>
+      <button onClick={handleAgregarUrl}>Agregar</button>
+    
+    <h3>Imagenes Guardadas</h3>
+    <ul>
+      {imagenes.map((img) => (
+        <li key={img.id}>
+          <img src={img.url} alt="Imagen" width="100" />
+          <br />
+          <button onClick={() => handleEliminarImagen(img.id)}>Eliminar</button>
+        </li>
+      ))}
+    </ul>
+    <hr />
+    <h2>Quiero Cerrar Sesion</h2>
+    <button onClick={handleLogout}>Cerrar Sesion</button>
+    {/* saltos de linea para que el menu no tape el boton */}
+    <br /><br /><br /><br /><br />
+  </div>
+  );
+}
+
+
