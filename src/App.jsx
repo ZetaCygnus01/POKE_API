@@ -12,6 +12,7 @@ import Usuarios from './Componentes/Usuarios';
 import Detalle from './Componentes/Detalle';
 import Login from './Componentes/Login';
 import Registro from './Componentes/Registro';
+import Administrador from './Componentes/Administrador';
 
 function App() {
 const [usuario, setUsuario] = useState(null);
@@ -49,6 +50,7 @@ if (cargando) return <p>Cargando...</p>;
             <Route path="/detalle/:name" element={usuario ? <Detalle /> : <Navigate to="/login" />} />
             <Route path="/login" element={<Login/>} />
             <Route path="/registro" element={<Registro/>} />
+            <Route path="/administrador" element={<Administrador/>} />
             <Route path="*" element={<Navigate to="/" />} />
       </Routes>
 

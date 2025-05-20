@@ -21,6 +21,12 @@ function Registro() {
 
   const handleRegistro = async (e) => {
     e.preventDefault();
+    setError(null);
+    // Validar que la contraseña tenga al menos 8 caracteres
+    if (formulario.password.length < 8) {
+      setError("La contraseña debe tener al menos 8 caracteres");
+      return;
+    }
 
     // Crear usuario en Supabase Auth
     const { data, error: errorAuth } = await supabase.auth.signUp({
@@ -29,14 +35,14 @@ function Registro() {
     });
 
     if (errorAuth) {
-      setError("Error al crear su usuario");
+      setError("Error al crear su usuario XDDDD: " + errorAuth.message);
       return;
     }
 
     const uid = data.user.id;
 
     // Insertar en tabla usuarios
-    const { error: errorInsert } = await supabase.from('usuarios').insert([
+    const { error: errorInsert } = await supabase.from('usuario').insert([
       {
         id: uid,
         nombre: formulario.nombre,
@@ -48,6 +54,7 @@ function Registro() {
     ]);
 
     if (errorInsert) {
+      console.log(errorInsert);
       setError("Usuario creado pero error en tabla usuarios: " + errorInsert.message);
     } else {
       navigate("/login");
