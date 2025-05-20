@@ -3,7 +3,7 @@ import { supabase } from "../../supabase";
 import { useNavigate } from "react-router-dom";
 
 function Administrador() {
-  const [usuarios, setUsuarios] = useState([]);
+  const [usuario, setUsuario] = useState([]);
   const [fotos, setFotos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [accesoPermitido, setAccesoPermitido] = useState(false);
@@ -20,7 +20,7 @@ function Administrador() {
       }
 
       const { data, error } = await supabase
-        .from("usuarios") // <-- cambiado a plural
+        .from("usuario") // <-- cambiado a plural
         .select("roll")
         .eq("id", user.id)
         .single();
@@ -42,25 +42,25 @@ function Administrador() {
 
     const obtenerDatos = async () => {
       try {
-        const { data: usuariosData, error: usuariosError } = await supabase
-          .from("usuarios") // <-- cambiado a plural
+        const { data: usuarioData, error: usuarioError } = await supabase
+          .from("usuario") // <-- cambiado a plural
           .select("id, nombre, correo, roll, telefono");
 
         const { data: fotosData, error: fotosError } = await supabase
           .from("multimedia")
           .select("id, url, usuarioid");
 
-        if (usuariosError || fotosError) {
-          console.error(usuariosError || fotosError);
+        if (usuarioError || fotosError) {
+          console.error(usuarioError || fotosError);
           return;
         }
 
-        const usuariosConFotos = usuariosData.map((usuario) => ({
+        const usuarioConFotos = usuarioData.map((usuario) => ({
           ...usuario,
           fotos: fotosData.filter((foto) => foto.usuarioid === usuario.id),
         }));
 
-        setUsuarios(usuariosConFotos);
+        setUsuario(usuarioConFotos);
         setFotos(fotosData);
         setLoading(false);
       } catch (error) {
@@ -74,7 +74,7 @@ function Administrador() {
   const editarUsuario = async (id, nuevoNombre, nuevoCorreo, nuevoTelefono) => {
     try {
       const { error } = await supabase
-        .from("usuarios") // <-- cambiado a plural
+        .from("usuario") // <-- cambiado a plural
         .update({
           nombre: nuevoNombre,
           correo: nuevoCorreo,
@@ -85,7 +85,7 @@ function Administrador() {
       if (error) {
         console.error(error);
       } else {
-        setUsuarios((prev) =>
+        setUsuario((prev) =>
           prev.map((usuario) =>
             usuario.id === id
               ? { ...usuario, nombre: nuevoNombre, correo: nuevoCorreo, telefono: nuevoTelefono }
@@ -109,8 +109,8 @@ function Administrador() {
         console.error("Error al eliminar la imagen:", error);
       } else {
         setFotos((prevFotos) => prevFotos.filter((foto) => foto.id !== imagenId));
-        setUsuarios((prevUsuarios) =>
-          prevUsuarios.map((usuario) => ({
+        setUsuario((prevUsuario) =>
+          prevUsuario.map((usuario) => ({
             ...usuario,
             fotos: usuario.fotos.filter((foto) => foto.id !== imagenId),
           }))
@@ -123,7 +123,7 @@ function Administrador() {
 
   const handleChange = (e, usuarioId, campo) => {
     const newValue = e.target.value;
-    setUsuarios((prev) =>
+    setUsuario((prev) =>
       prev.map((usuario) =>
         usuario.id === usuarioId ? { ...usuario, [campo]: newValue } : usuario
       )
@@ -131,7 +131,7 @@ function Administrador() {
   };
 
   if (!accesoPermitido) return null;
-  if (loading) return <div>Cargando...</div>;
+  if (loading) return <div>Cargando XDDD...</div>;
 
   return (
     <div className="admin-container">
@@ -148,7 +148,7 @@ function Administrador() {
           </tr>
         </thead>
         <tbody>
-          {usuarios.map((usuario) => (
+          {usuario.map((usuario) => (
             <tr key={usuario.id}>
               <td>{usuario.id}</td>
               <td>

@@ -43,8 +43,7 @@ if (cargando) return <p>Cargando...</p>;
       <Routes>
        <Route path="/" element={usuario ? <Lista /> : <Navigate to="/login"/>} />
             <Route path="/usuarios" element={usuario ? <Usuarios /> : <Navigate to="/login" />} />
-            <Route path="/aleatorios" element={usuario ? <Aleatorios /> :
-            <Navigate to="/login" />} />
+            <Route path="/aleatorios" element={usuario ? <Aleatorios /> :<Navigate to="/login" />} />
             <Route path="/capturados" element={usuario ? <Capturados /> : <Navigate to="/login" />} />
             <Route path="/favoritos" element={usuario ? <Favoritos /> : <Navigate to="/login" />} />
             <Route path="/detalle/:name" element={usuario ? <Detalle /> : <Navigate to="/login" />} />
