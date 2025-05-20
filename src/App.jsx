@@ -11,6 +11,7 @@ import Favoritos from './Componentes/Favoritos';
 import Usuarios from './Componentes/Usuarios';
 import Detalle from './Componentes/Detalle';
 import Login from './Componentes/Login';
+import Registro from './Componentes/Registro';
 
 function App() {
 const [usuario, setUsuario] = useState(null);
@@ -43,13 +44,12 @@ if (cargando) return <p>Cargando...</p>;
             <Route path="/usuarios" element={usuario ? <Usuarios /> : <Navigate to="/login" />} />
             <Route path="/aleatorios" element={usuario ? <Aleatorios /> :
             <Navigate to="/login" />} />
-            <Route path="/capturados" element={usuario ? <Capturados /> :
-            <Navigate to="/login" />} />
-            <Route path="/favoritos" element={usuario ? <Favoritos /> :
-            <Navigate to="/login" />} />
-            <Route path="/detalle/:name" element={usuario ? <Detalle /> :
-            <Navigate to="/login" />} />
+            <Route path="/capturados" element={usuario ? <Capturados /> : <Navigate to="/login" />} />
+            <Route path="/favoritos" element={usuario ? <Favoritos /> : <Navigate to="/login" />} />
+            <Route path="/detalle/:name" element={usuario ? <Detalle /> : <Navigate to="/login" />} />
             <Route path="/login" element={<Login/>} />
+            <Route path="/registro" element={<Registro/>} />
+            <Route path="*" element={<Navigate to="/" />} />
       </Routes>
 
     </Router>

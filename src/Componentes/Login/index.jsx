@@ -33,7 +33,8 @@ function Login() {
                 />
                 <button type="submit">Iniciar Sesion</button>
             </form>
-            <p>¿No tienes cuenta? <a href="/register">Regístrate</a></p>
+            <p>¿No tienes cuenta?</p>
+            <button onClick={() => navigate("/registro")}>Registrese</button>
         </div>
     )
 }
